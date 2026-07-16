@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>橙多教育成考院校查询系统 | 年学费+总学费+学制</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f7ff;
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1a2c3e;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0b3b5f, #1b7e8f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: #4a627a;
+            font-size: 0.95rem;
+            background: #eef4fc;
+            border-radius: 40px;
+            padding: 0.4rem 1.2rem;
+            display: inline-block;
+        }
+
+        .search-card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            border-bottom: 1px solid #e9f0f5;
+            padding-bottom: 1.2rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #0f3b4c;
+            font-size: 0.95rem;
+        }
+
+        .level-options {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .level-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            transition: all 0.2s;
+            border: 1px solid #e2edf2;
+        }
+
+        .level-option.active {
+            background: #1f6e7c;
+            border-color: #1f6e7c;
+            color: white;
+        }
+
+        .level-option.active input {
+            accent-color: white;
+        }
+
+        .level-option input {
+            margin: 0;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .level-option span {
+            cursor: pointer;
+        }
+
+        .search-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .search-input-wrapper {
+            flex: 3;
+            min-width: 200px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+            border: 1.5px solid #e2edf2;
+            border-radius: 60px;
+            outline: none;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .search-input:focus {
+            border-color: #2c9ab3;
+            box-shadow: 0 0 0 3px rgba(44, 154, 179, 0.2);
+        }
+
+        .btn-search {
+            background: #1f6e7c;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-search:hover {
+            background: #0e5563;
+            transform: scale(0.98);
+        }
+
+        .btn-clear {
+            background: #eef2f6;
+            color: #2c5a6e;
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-clear:hover {
+            background: #e2e9f0;
+        }
+
+        /* 咨询卡片样式 - 紧凑型，微信号与复制按钮同行右侧 */
+        .consult-card {
+            background: linear-gradient(105deg, #f0f9ff, #e6f4f7);
+            border-radius: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            border: 1px solid #cde9f0;
+        }
+        .consult-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .consult-title {
+            font-weight: 800;
+            font-size: 1rem;
+            color: #1a6c7c;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .consult-desc {
+            font-size: 0.78rem;
+            color: #3d7b8c;
+        }
+        .wechat-action {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: white;
+            padding: 0.2rem 0.6rem 0.2rem 1rem;
+            border-radius: 60px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .wechat-id {
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            color: #0b5e6b;
+        }
+        .copy-btn {
+            background: #eef2f6;
+            border: none;
+            padding: 0.25rem 0.7rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .copy-btn:hover {
+            background: #d0e2e9;
+        }
+        .consult-badge {
+            background: #ff8c00;
+            color: white;
+            padding: 0.25rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        @media (max-width: 780px) {
+            .consult-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .consult-left {
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .consult-badge {
+                text-align: center;
+            }
+        }
+        @media (max-width: 550px) {
+            .consult-left {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .wechat-action {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            gap: 0.8rem;
+        }
+
+        .result-count {
+            background: white;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1f6e7c;
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .sort-btn {
+            background: transparent;
+            border: 1px solid #cbdbe0;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #2b5f74;
+        }
+
+        .sort-btn.active {
+            background: #1f6e7c;
+            border-color: #1f6e7c;
+            color: white;
+        }
+
+        .universities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .uni-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9f0f5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .uni-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            background: linear-gradient(105deg, #f8fcff, #ffffff);
+            padding: 1.2rem 1.3rem 0.6rem 1.3rem;
+            border-bottom: 2px solid #e9f0f5;
+        }
+
+        .uni-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #133c4a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .uni-badge {
+            background: #e5f5f7;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            color: #1a7f8f;
+            font-weight: 500;
+        }
+
+        .card-body {
+            padding: 1rem 1.3rem;
+            flex: 1;
+        }
+
+        .major-item {
+            background: #fafdff;
+            border-radius: 1rem;
+            padding: 0.7rem 0.9rem;
+            margin-bottom: 0.7rem;
+            border-left: 4px solid #2c9ab3;
+        }
+
+        .major-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1c5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .fee-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 6px;
+            font-size: 0.75rem;
+            align-items: center;
+        }
+
+        .fee-item {
+            background: #f0f6fa;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .year-tuition {
+            background: #e6f4ea;
+            font-weight: 600;
+            color: #2c6e2f;
+        }
+
+        .duration {
+            background: #e3f0fc;
+            font-weight: 600;
+            color: #1a6091;
+        }
+
+        .total-fee {
+            background: #fff0db;
+            font-weight: 600;
+            color: #b45f06;
+        }
+
+        .level-tag {
+            display: inline-block;
+            background: #eef2fa;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            color: #2c6979;
+            margin-top: 6px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3.5rem 2rem;
+            background: white;
+            border-radius: 2rem;
+            margin-top: 1rem;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #8aaec0;
+            border-top: 1px solid #e0edf3;
+            padding-top: 1.8rem;
+        }
+
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .search-card {
+                padding: 1.2rem;
+            }
+            .filter-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            .search-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .universities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>📚 广东成考院校查询系统</h1>
+        <p>橙多教育 · 版权所有 · 2026年7月更新</p>
+    </div>
+
+    <div class="search-card">
+        <div class="filter-group">
+            <div class="filter-label">🎓 招生层次（必选一项）：</div>
+            <div class="level-options" id="levelOptions">
+                <label class="level-option" id="levelGaozhuan">
+                    <input type="radio" name="level" value="高起专"> <span>高起专</span>
+                </label>
+                <label class="level-option" id="levelZhuanshengben">
+                    <input type="radio" name="level" value="专升本"> <span>专升本</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="search-row">
+            <div class="search-input-wrapper">
+                <input type="text" id="searchInput" class="search-input" placeholder="输入专业关键词，例如：工商、机电、电气..." autocomplete="off">
+            </div>
+            <button id="searchBtn" class="btn-search">🔎 查询院校</button>
+            <button id="clearBtn" class="btn-clear">🗑️ 重置条件</button>
+        </div>
+
+        <!-- 咨询区域 -->
+        <div class="consult-card">
+            <div class="consult-left">
+                <div class="consult-title">
+                    <span>📞</span> 立即咨询 · 学历提升
+                </div>
+                <div class="consult-desc">👩‍🏫 专业老师1对1答疑，可享学费优惠</div>
+                <div class="wechat-action">
+                    <span class="wechat-id" id="wechatId">ruxue0769</span>
+                    <button class="copy-btn" id="copyWechatBtn">复制微信号</button>
+                </div>
+            </div>
+            <div class="consult-badge">
+                💬 添加微信，即刻咨询
+            </div>
+        </div>
+        <div style="font-size: 0.75rem; margin-top: 12px; color: #608b9b;">
+            💡 提示：必须选择“高起专”或“专升本”后再查询。
+        </div>
+    </div>
+
+    <div class="info-bar">
+        <div class="result-count" id="resultCount">📌 请选择层次并查询</div>
+        <div class="sort-options">
+            <span style="font-size: 0.8rem;">排序：</span>
+            <button data-sort="default" class="sort-btn active">🏫 默认</button>
+            <button data-sort="year_asc" class="sort-btn">💰 年学费升序</button>
+            <button data-sort="total_asc" class="sort-btn">📊 总费用升序</button>
+        </div>
+    </div>
+
+    <div id="universitiesContainer" class="universities-grid"></div>
+    <footer>⚠️ 年学费根据总费用 ÷ 学制年数自动计算，实际学费以院校官方公布为准。</footer>
+</div>
+
+<script>
+    // ======================== 核心数据 ========================
+    const rawRows = [
+         { school: "广东外语外贸大学", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 7500 },
+  { school: "广东外语外贸大学", level: "高起专", major: "人力资源管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广东外语外贸大学", level: "高起专", major: "商务日语", durationStr: "3年", totalFee: 8625 },
+  { school: "广东外语外贸大学", level: "高起专", major: "商务英语", durationStr: "3年", totalFee: 8625 },
+  { school: "广东外语外贸大学", level: "专升本", major: "日语", durationStr: "3年", totalFee: 9315 },
+  { school: "广东外语外贸大学", level: "专升本", major: "英语", durationStr: "3年", totalFee: 9315 },
+  { school: "广东外语外贸大学", level: "专升本", major: "商务英语", durationStr: "3年", totalFee: 9315 },
+  { school: "广东外语外贸大学", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "财务管理", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "市场营销", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "行政管理", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "人力资源管理", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "金融学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "国际经济与贸易", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "教育学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东外语外贸大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东工业大学", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 7500 },
+  { school: "广东工业大学", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广东工业大学", level: "高起专", major: "工程造价", durationStr: "3年", totalFee: 8625 },
+  { school: "广东工业大学", level: "高起专", major: "建筑工程技术", durationStr: "3年", totalFee: 8625 },
+  { school: "广东工业大学", level: "高起专", major: "机电一体化技术", durationStr: "3年", totalFee: 8625 },
+  { school: "广东工业大学", level: "专升本", major: "土木工程", durationStr: "3年", totalFee: 9315 },
+  { school: "广东工业大学", level: "专升本", major: "建筑学", durationStr: "3年", totalFee: 9315 },
+  { school: "广东工业大学", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 9315 },
+  { school: "广东工业大学", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 9315 },
+  { school: "广东工业大学", level: "专升本", major: "工程管理", durationStr: "3年", totalFee: 9315 },
+  { school: "广东工业大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 8100 },
+  { school: "广东工业大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东工业大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东工业大学", level: "专升本", major: "人力资源管理", durationStr: "3年", totalFee: 8100 },
+  { school: "岭南师范学院", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 6900 },
+  { school: "岭南师范学院", level: "高起专", major: "学前教育", durationStr: "3年", totalFee: 6900 },
+  { school: "岭南师范学院", level: "高起专", major: "社会工作", durationStr: "3年", totalFee: 6900 },
+  { school: "岭南师范学院", level: "高起专", major: "小学语文教育", durationStr: "3年", totalFee: 6900 },
+  { school: "岭南师范学院", level: "高起专", major: "烹饪工艺与营养", durationStr: "3年", totalFee: 7935 },
+  { school: "岭南师范学院", level: "高起专", major: "小学数学教育", durationStr: "3年", totalFee: 7935 },
+  { school: "岭南师范学院", level: "高起专", major: "商务英语", durationStr: "3年", totalFee: 7935 },
+  { school: "岭南师范学院", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "历史学", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "社会工作", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "法学", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "小学教育", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "特殊教育", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "学前教育", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "人力资源管理", durationStr: "3年", totalFee: 7500 },
+  { school: "岭南师范学院", level: "专升本", major: "英语", durationStr: "3年", totalFee: 8625 },
+  { school: "岭南师范学院", level: "专升本", major: "体育教育", durationStr: "3年", totalFee: 8625 },
+  { school: "岭南师范学院", level: "专升本", major: "烹饪与营养教育", durationStr: "3年", totalFee: 8625 },
+  { school: "岭南师范学院", level: "专升本", major: "数学与应用数学", durationStr: "3年", totalFee: 8625 },
+  { school: "岭南师范学院", level: "专升本", major: "心理学", durationStr: "3年", totalFee: 8625 },
+  { school: "岭南师范学院", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 8625 },
+  { school: "岭南师范学院", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 8625 },
+  { school: "岭南师范学院", level: "专升本", major: "音乐学", durationStr: "3年", totalFee: 11400 },
+  { school: "岭南师范学院", level: "专升本", major: "美术学", durationStr: "3年", totalFee: 14400 },
+  { school: "广东警官学院", level: "高起专", major: "法律事务", durationStr: "2.5年", totalFee: 6900 },
+  { school: "广东警官学院", level: "高起本", major: "法学", durationStr: "5年", totalFee: 12500 },
+  { school: "广东警官学院", level: "专升本", major: "治安学（要提供县级以上公安证明）", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东警官学院", level: "专升本", major: "行政管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东警官学院", level: "专升本", major: "法学", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东警官学院", level: "专升本", major: "侦查学（限在职民警报）", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞理工学院", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 6900 },
+  { school: "东莞理工学院", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 6900 },
+  { school: "东莞理工学院", level: "高起专", major: "计算机应用技术", durationStr: "3年", totalFee: 7800 },
+  { school: "东莞理工学院", level: "专升本", major: "法学", durationStr: "3年", totalFee: 7500 },
+  { school: "东莞理工学院", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 7500 },
+  { school: "东莞理工学院", level: "专升本", major: "国际经济与贸易", durationStr: "3年", totalFee: 7500 },
+  { school: "东莞理工学院", level: "专升本", major: "人力资源管理", durationStr: "3年", totalFee: 7500 },
+  { school: "东莞理工学院", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 7500 },
+  { school: "东莞理工学院", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 7500 },
+  { school: "东莞理工学院", level: "专升本", major: "小学教育", durationStr: "3年", totalFee: 7500 },
+  { school: "东莞理工学院", level: "专升本", major: "机械设计制造及其自动化", durationStr: "3年", totalFee: 8550 },
+  { school: "东莞理工学院", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 8550 },
+  { school: "东莞理工学院", level: "专升本", major: "土木工程", durationStr: "3年", totalFee: 8550 },
+  { school: "东莞理工学院", level: "专升本", major: "环境工程", durationStr: "3年", totalFee: 8550 },
+  { school: "东莞理工学院", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 8550 },
+  { school: "东莞理工学院", level: "专升本", major: "英语", durationStr: "3年", totalFee: 8550 },
+  { school: "华南农业大学", level: "高起专", major: "畜牧兽医", durationStr: "3年", totalFee: 9660 },
+  { school: "华南农业大学", level: "高起专", major: "机电一体化技术", durationStr: "3年", totalFee: 9660 },
+  { school: "华南农业大学", level: "高起专", major: "建筑室内设计", durationStr: "3年", totalFee: 9660 },
+  { school: "华南农业大学", level: "高起专", major: "园林技术", durationStr: "3年", totalFee: 9660 },
+  { school: "华南农业大学", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 8400 },
+  { school: "华南农业大学", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 8400 },
+  { school: "华南农业大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 9000 },
+  { school: "华南农业大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 9000 },
+  { school: "华南农业大学", level: "专升本", major: "行政管理", durationStr: "3年", totalFee: 9000 },
+  { school: "华南农业大学", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 9000 },
+  { school: "华南农业大学", level: "专升本", major: "市场营销", durationStr: "3年", totalFee: 9000 },
+  { school: "华南农业大学", level: "专升本", major: "人力资源管理", durationStr: "3年", totalFee: 9000 },
+  { school: "华南农业大学", level: "专升本", major: "社会工作", durationStr: "3年", totalFee: 9000 },
+  { school: "华南农业大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 9000 },
+  { school: "华南农业大学", level: "专升本", major: "土木工程", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "动物医学", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "机械设计制造及其自动化", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "环境工程", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "水利水电工程", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "食品质量与安全", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "应用化学", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "测绘工程", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "园林", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "林学", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "茶学", durationStr: "3年", totalFee: 10350 },
+  { school: "华南农业大学", level: "专升本", major: "农学", durationStr: "3年", totalFee: 10350 },
+  { school: "广东第二师范学院", level: "高起专", major: "学前教育", durationStr: "2.5年", totalFee: 6900 },
+  { school: "广东第二师范学院", level: "高起专", major: "小学语文教育", durationStr: "2.5年", totalFee: 6900 },
+  { school: "广东第二师范学院", level: "高起专", major: "行政管理", durationStr: "2.5年", totalFee: 6900 },
+  { school: "广东第二师范学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 7800 },
+  { school: "广东第二师范学院", level: "专升本", major: "汉语言文学", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东第二师范学院", level: "专升本", major: "行政管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东第二师范学院", level: "专升本", major: "学前教育", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东第二师范学院", level: "专升本", major: "英语", durationStr: "2.5年", totalFee: 8400 },
+  { school: "广东第二师范学院", level: "专升本", major: "计算机科学与技术", durationStr: "2.5年", totalFee: 8400 },
+  { school: "广东第二师范学院", level: "专升本", major: "数学与应用数学", durationStr: "2.5年", totalFee: 8400 },
+  { school: "广东第二师范学院", level: "专升本", major: "应用心理学", durationStr: "2.5年", totalFee: 8400 },
+  { school: "广东第二师范学院", level: "专升本", major: "体育教育", durationStr: "2.5年", totalFee: 8400 },
+  { school: "广东第二师范学院", level: "专升本", major: "美术学", durationStr: "2.5年", totalFee: 15000 },
+  { school: "广东第二师范学院", level: "专升本", major: "音乐学", durationStr: "2.5年", totalFee: 15000 },
+  { school: "广东药科大学", level: "高起专", major: "药学", durationStr: "3年", totalFee: 9750 },
+  { school: "广东药科大学", level: "高起专", major: "中药学", durationStr: "3年", totalFee: 9750 },
+  { school: "广东药科大学", level: "高起专", major: "护理", durationStr: "3年", totalFee: 9750 },
+  { school: "广东药科大学", level: "专升本", major: "药学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东药科大学", level: "专升本", major: "护理学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东药科大学", level: "专升本", major: "临床医学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东药科大学", level: "专升本", major: "康复治疗学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东药科大学", level: "专升本", major: "中药学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东药科大学", level: "专升本", major: "中医学", durationStr: "3年", totalFee: 10530 },
+  { school: "广州大学", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 6900 },
+  { school: "广州大学", level: "高起专", major: "学前教育", durationStr: "3年", totalFee: 6900 },
+  { school: "广州大学", level: "高起专", major: "计算机应用技术", durationStr: "3年", totalFee: 6900 },
+  { school: "广州大学", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "小学教育", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "思想品德教育", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "学前教育", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "工程管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "行政管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "市场营销", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "金融学", durationStr: "3年", totalFee: 7500 },
+  { school: "广州大学", level: "专升本", major: "英语", durationStr: "3年", totalFee: 8625 },
+  { school: "广州大学", level: "专升本", major: "土木工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广州大学", level: "专升本", major: "建筑学", durationStr: "3年", totalFee: 8625 },
+  { school: "广州大学", level: "专升本", major: "给排水科学与工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广州大学", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 8625 },
+  { school: "广州大学", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 8625 },
+  { school: "广东财经大学", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广东财经大学", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 7500 },
+  { school: "广东财经大学", level: "高起专", major: "金融服务与管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广东财经大学", level: "高起专", major: "计算机应用技术", durationStr: "3年", totalFee: 8400 },
+  { school: "广东财经大学", level: "专升本", major: "金融学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东财经大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 8100 },
+  { school: "广东财经大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 8100 },
+  { school: "广东财经大学", level: "专升本", major: "人力资源管理", durationStr: "3年", totalFee: 8100 },
+  { school: "广东财经大学", level: "专升本", major: "电子商务", durationStr: "3年", totalFee: 8100 },
+  { school: "广东财经大学", level: "专升本", major: "市场营销", durationStr: "3年", totalFee: 8100 },
+  { school: "广东财经大学", level: "专升本", major: "社会工作", durationStr: "3年", totalFee: 8100 },
+  { school: "广东财经大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 8100 },
+  { school: "汕头大学", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 8400 },
+  { school: "汕头大学", level: "高起专", major: "行政管理", durationStr: "3年", totalFee: 8400 },
+  { school: "汕头大学", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 8400 },
+  { school: "汕头大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 9000 },
+  { school: "汕头大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 9000 },
+  { school: "汕头大学", level: "专升本", major: "行政管理", durationStr: "3年", totalFee: 9000 },
+  { school: "汕头大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 9000 },
+  { school: "汕头大学", level: "专升本", major: "金融学", durationStr: "3年", totalFee: 9000 },
+  { school: "汕头大学", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 9000 },
+  { school: "汕头大学", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 10350 },
+  { school: "汕头大学医学院", level: "高起专", major: "护理", durationStr: "3年", totalFee: 9750 },
+  { school: "汕头大学医学院", level: "专升本", major: "临床医学", durationStr: "3年", totalFee: 10530 },
+  { school: "汕头大学医学院", level: "专升本", major: "护理学", durationStr: "3年", totalFee: 10530 },
+  { school: "韩山师范学院", level: "专升本", major: "法学", durationStr: "3年", totalFee: 7200 },
+  { school: "韩山师范学院", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 7200 },
+  { school: "韩山师范学院", level: "专升本", major: "社会工作", durationStr: "3年", totalFee: 7200 },
+  { school: "韩山师范学院", level: "专升本", major: "思想政治教育", durationStr: "3年", totalFee: 7200 },
+  { school: "韩山师范学院", level: "专升本", major: "财务管理", durationStr: "3年", totalFee: 8100 },
+  { school: "韩山师范学院", level: "专升本", major: "档案学", durationStr: "3年", totalFee: 8100 },
+  { school: "韩山师范学院", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 8100 },
+  { school: "韩山师范学院", level: "专升本", major: "人力资源管理", durationStr: "3年", totalFee: 8100 },
+  { school: "韩山师范学院", level: "专升本", major: "数学与应用数学", durationStr: "3年", totalFee: 8100 },
+  { school: "韩山师范学院", level: "专升本", major: "体育教育", durationStr: "3年", totalFee: 8100 },
+  { school: "韩山师范学院", level: "专升本", major: "小学教育", durationStr: "3年", totalFee: 8100 },
+  { school: "韩山师范学院", level: "专升本", major: "学前教育", durationStr: "3年", totalFee: 8100 },
+  { school: "韩山师范学院", level: "专升本", major: "烹饪与营养教育", durationStr: "3年", totalFee: 8400 },
+  { school: "韩山师范学院", level: "专升本", major: "英语", durationStr: "3年", totalFee: 8400 },
+  { school: "韩山师范学院", level: "专升本", major: "美术学", durationStr: "3年", totalFee: 12000 },
+  { school: "韩山师范学院", level: "专升本", major: "音乐学", durationStr: "3年", totalFee: 12000 },
+  { school: "韩山师范学院", level: "高起专", major: "烹饪工艺与营养", durationStr: "3年", totalFee: 7500 },
+  { school: "韩山师范学院", level: "高起专", major: "学前教育", durationStr: "3年", totalFee: 6600 },
+  { school: "韩山师范学院", level: "高起专", major: "音乐表演", durationStr: "3年", totalFee: 11200 },
+  { school: "广东石油化工学院", level: "高起专", major: "石油化工技术", durationStr: "3年", totalFee: 7935 },
+  { school: "广东石油化工学院", level: "高起专", major: "建筑工程技术", durationStr: "3年", totalFee: 7935 },
+  { school: "广东石油化工学院", level: "高起专", major: "机械设计与制造", durationStr: "3年", totalFee: 7935 },
+  { school: "广东石油化工学院", level: "高起专", major: "电气自动化技术", durationStr: "3年", totalFee: 7935 },
+  { school: "广东石油化工学院", level: "高起专", major: "学前教育", durationStr: "3年", totalFee: 6900 },
+  { school: "广东石油化工学院", level: "专升本", major: "法学", durationStr: "3年", totalFee: 7500 },
+  { school: "广东石油化工学院", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 7500 },
+  { school: "广东石油化工学院", level: "专升本", major: "学前教育", durationStr: "3年", totalFee: 7500 },
+  { school: "广东石油化工学院", level: "专升本", major: "市场营销", durationStr: "3年", totalFee: 7500 },
+  { school: "广东石油化工学院", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 7500 },
+  { school: "广东石油化工学院", level: "专升本", major: "国际经济与贸易", durationStr: "3年", totalFee: 7500 },
+  { school: "广东石油化工学院", level: "专升本", major: "应用化学", durationStr: "3年", totalFee: 8625 },
+  { school: "广东石油化工学院", level: "专升本", major: "地理科学", durationStr: "3年", totalFee: 8625 },
+  { school: "广东石油化工学院", level: "专升本", major: "数学与应用数学", durationStr: "3年", totalFee: 8625 },
+  { school: "广东石油化工学院", level: "专升本", major: "安全工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广东石油化工学院", level: "专升本", major: "土木工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广东石油化工学院", level: "专升本", major: "机械设计制造及其自动化", durationStr: "3年", totalFee: 8625 },
+  { school: "广东石油化工学院", level: "专升本", major: "化学工程与工艺", durationStr: "3年", totalFee: 8625 },
+  { school: "南方医科大学", level: "专升本", major: "中药学", durationStr: "3年", totalFee: 11700 },
+  { school: "南方医科大学", level: "专升本", major: "药学", durationStr: "3年", totalFee: 11700 },
+  { school: "南方医科大学", level: "专升本", major: "康复治疗学", durationStr: "3年", totalFee: 11700 },
+  { school: "南方医科大学", level: "专升本", major: "护理学", durationStr: "3年", totalFee: 11700 },
+  { school: "南方医科大学", level: "专升本", major: "医学检测技术", durationStr: "3年", totalFee: 11700 },
+  { school: "南方医科大学", level: "专升本", major: "中医学", durationStr: "3年", totalFee: 11700 },
+  { school: "南方医科大学", level: "专升本", major: "临床医学", durationStr: "3年", totalFee: 11700 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "护理", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "药学", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "中医康复技术", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "医学美容技术", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "康复管理", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "食品质量与安全", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "中医学", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "医学检验技术", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "医学影像技术", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "临床医学", durationStr: "3年", totalFee: 8970 },
+  { school: "广东江门中医药职业学院", level: "高起专", major: "口腔医学技术", durationStr: "3年", totalFee: 8970 },
+  { school: "广东南方职业学院", level: "高起专", major: "电力系统自动化技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "建筑设计", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "建设工程管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "工程造价", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "模具设计与制造", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "工业机器人技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "汽车制造与试验技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "软件技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "数字媒体技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "金融服务与管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "大数据与会计", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "市场营销", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "电子商务", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "现代物流管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "旅游管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "酒店管理与数字化运营", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "人力资源管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "婴幼儿托育服务与管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东南方职业学院", level: "高起专", major: "学前教育", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "大数据与会计", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "电子商务", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "新能源汽车技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "工业机器人技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "计算机网络技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "建设工程管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "建筑室内设计", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "护理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "药学", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "康复治疗技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "口腔医学技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州华夏职业学院", level: "高起专", major: "学前教育", durationStr: "2.5年", totalFee: 7500 },
+  { school: "暨南大学", level: "高起专", major: "计算机网络技术", durationStr: "3年", totalFee: 9660 },
+  { school: "暨南大学", level: "高起专", major: "大数据与财务管理", durationStr: "3年", totalFee: 8400 },
+  { school: "暨南大学", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 8400 },
+  { school: "暨南大学", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 8400 },
+  { school: "暨南大学", level: "高起专", major: "市场营销", durationStr: "3年", totalFee: 8400 },
+  { school: "暨南大学", level: "高起专", major: "人力资源管理", durationStr: "3年", totalFee: 8400 },
+  { school: "暨南大学", level: "高起专", major: "行政管理", durationStr: "3年", totalFee: 8400 },
+  { school: "暨南大学", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 10350 },
+  { school: "暨南大学", level: "专升本", major: "人工智能", durationStr: "3年", totalFee: 10350 },
+  { school: "暨南大学", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 10350 },
+  { school: "暨南大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 9000 },
+  { school: "暨南大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 9000 },
+  { school: "暨南大学", level: "专升本", major: "市场营销", durationStr: "3年", totalFee: 9000 },
+  { school: "暨南大学", level: "专升本", major: "财务管理", durationStr: "3年", totalFee: 9000 },
+  { school: "暨南大学", level: "专升本", major: "人力资源管理", durationStr: "3年", totalFee: 9000 },
+  { school: "暨南大学", level: "专升本", major: "行政管理", durationStr: "3年", totalFee: 9000 },
+  { school: "暨南大学", level: "专升本", major: "电子商务", durationStr: "3年", totalFee: 9000 },
+  { school: "暨南大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 9000 },
+  { school: "暨南大学", level: "专升本", major: "护理学", durationStr: "3年", totalFee: 11700 },
+  { school: "暨南大学", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 9000 },
+  { school: "广州卫生职业技术学院", level: "高起专", major: "护理", durationStr: "3年", totalFee: 8970 },
+  { school: "广州卫生职业技术学院", level: "高起专", major: "药学", durationStr: "3年", totalFee: 8970 },
+  { school: "广州卫生职业技术学院", level: "高起专", major: "医学检验技术", durationStr: "3年", totalFee: 8970 },
+  { school: "广州卫生职业技术学院", level: "高起专", major: "康复治疗技术", durationStr: "3年", totalFee: 8970 },
+  { school: "广东培正学院", level: "专升本", major: "会计学", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "财务管理", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "工商管理", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "人力资源管理", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "行政管理", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "应用心理学", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "物流管理", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "计算机科学与技术", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "网络工程", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "软件工程", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "法学", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "广告学", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "秘书学", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "汉语国际教育", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广东培正学院", level: "专升本", major: "学前教育", durationStr: "2.5年", totalFee: 8700 },
+  { school: "广州商学院", level: "专升本", major: "法学", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "软件工程", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "计算机科学与技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "数据科学与大数据技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "会计学", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "金融学", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "市场营销", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "电子商务", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "物流管理", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "财务管理", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州商学院", level: "专升本", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 9000 },
+  { school: "深圳大学", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "高起专", major: "人力资源管理", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "高起专", major: "计算机应用技术", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "专升本", major: "电子信息工程", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "专升本", major: "土木工程", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "专升本", major: "工程管理", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 9000 },
+  { school: "深圳大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 9000 },
+  { school: "广东海洋大学", level: "高起专", major: "工商企业管理", durationStr: "3年", totalFee: 6900 },
+  { school: "广东海洋大学", level: "高起专", major: "大数据与财务管理", durationStr: "3年", totalFee: 6900 },
+  { school: "广东海洋大学", level: "高起专", major: "计算机应用技术", durationStr: "3年", totalFee: 7935 },
+  { school: "广东海洋大学", level: "高起专", major: "畜牧兽医", durationStr: "3年", totalFee: 7935 },
+  { school: "广东海洋大学", level: "专升本", major: "法学", durationStr: "3年", totalFee: 7500 },
+  { school: "广东海洋大学", level: "专升本", major: "国际经济与贸易", durationStr: "3年", totalFee: 7500 },
+  { school: "广东海洋大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广东海洋大学", level: "专升本", major: "行政管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广东海洋大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 7500 },
+  { school: "广东海洋大学", level: "专升本", major: "汉语言文学", durationStr: "3年", totalFee: 7500 },
+  { school: "广东海洋大学", level: "专升本", major: "工程管理", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "机械设计制造及其自动化", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "食品质量与安全", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "环境科学", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "船舶与海洋工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "航海技术", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "大气科学", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "动物医学", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "园林", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "水产养殖学", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "英语", durationStr: "3年", totalFee: 8625 },
+  { school: "广东海洋大学", level: "专升本", major: "视觉传达与设计", durationStr: "3年", totalFee: 15000 },
+  { school: "湛江科技学院", level: "专升本", major: "计算机科学与技术", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "市场营销", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "财务管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "电子商务", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "土木工程", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "电气工程及其自动化", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "公共事业管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "机械设计制造及其自动化", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "汽车服务工程", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "安全工程", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "工程管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "酒店管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "汉语国际教育", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "英语", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "小学教育", durationStr: "2.5年", totalFee: 8750 },
+  { school: "湛江科技学院", level: "专升本", major: "电子信息工程", durationStr: "2.5年", totalFee: 8750 },
+  { school: "东莞城市学院", level: "专升本", major: "工程管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "市场营销", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "电子商务", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "互联网金融", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "工业设计", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "环境工程", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "人力资源管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "行政管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "社会工作", durationStr: "2.5年", totalFee: 7500 },
+  { school: "东莞城市学院", level: "专升本", major: "计算机科学与技术", durationStr: "2.5年", totalFee: 8750 },
+  { school: "东莞城市学院", level: "专升本", major: "财务管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "东莞城市学院", level: "专升本", major: "汉语言文学", durationStr: "2.5年", totalFee: 8750 },
+  { school: "东莞城市学院", level: "专升本", major: "机械设计制造及其自动化", durationStr: "2.5年", totalFee: 8750 },
+  { school: "东莞城市学院", level: "专升本", major: "视觉传达设计", durationStr: "2.5年", totalFee: 8250 },
+  { school: "东莞城市学院", level: "专升本", major: "网络与新媒体", durationStr: "2.5年", totalFee: 8250 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "建筑工程技术", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "工程造价", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "园林工程技术", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "酒店管理与数字化运营", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "连锁经营与管理", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "现代物业管理", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "学前教育", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "智能控制技术", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "智能机器人技术", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东碧桂园职业学院", level: "专科", major: "建筑装饰工程技术", durationStr: "2.5年", totalFee: 6000 },
+  { school: "广东邮电职业技术学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 5750 },
+  { school: "广东邮电职业技术学院", level: "高起专", major: "移动商务", durationStr: "2.5年", totalFee: 5750 },
+  { school: "广东邮电职业技术学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广东邮电职业技术学院", level: "高起专", major: "大数据技术", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广东邮电职业技术学院", level: "高起专", major: "人工智能技术应用", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广东邮电职业技术学院", level: "高起专", major: "现代通信技术", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广东邮电职业技术学院", level: "高起专", major: "电子信息工程技术", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广东邮电职业技术学院", level: "高起专", major: "供用电技术", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "商务英语", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "环境艺术设计", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "工程造价", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "建设工程管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "数控技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "机械制造及自动化", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "汽车制造与试验技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "物联网应用技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "计算机网络技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "软件技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "数字媒体技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "婴幼儿托育服务与管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "大数据与会计", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "电子商务", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "网络营销与直播电商", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广东信息工程职业学院", level: "高起专", major: "现代物流管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "电子科技大学中山学院", level: "高起专", major: "机械设计与制造", durationStr: "2.5年", totalFee: 7250 },
+  { school: "电子科技大学中山学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 7250 },
+  { school: "电子科技大学中山学院", level: "高起专", major: "艺术设计", durationStr: "2.5年", totalFee: 7250 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "财务管理", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "电子商务", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "工商管理", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "行政管理", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "人力资源管理", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "金融学", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "物流管理", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "计算机科学与技术", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "机械设计制造及其自动化", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "电子信息工程", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "电气工程及其自动化", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "法学", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "英语", durationStr: "2.5年", totalFee: 8400 },
+  { school: "电子科技大学中山学院", level: "专升本", major: "视觉传达设计", durationStr: "2.5年", totalFee: 8400 },
+  { school: "广州航海学院", level: "高起专", major: "市场营销", durationStr: "2.5年", totalFee: 5750 },
+  { school: "广州航海学院", level: "高起专", major: "航海技术", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广州航海学院", level: "高起专", major: "轮机工程技术", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广州航海学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 6612.5 },
+  { school: "广州航海学院", level: "专升本", major: "机械工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "土木工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "港口航道与海岸工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "交通运输", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "航海技术", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "轮机工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "船舶与海洋工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "商务英语", durationStr: "3年", totalFee: 8625 },
+  { school: "广州航海学院", level: "专升本", major: "金融学", durationStr: "3年", totalFee: 7500 },
+  { school: "广州航海学院", level: "专升本", major: "工程管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广州航海学院", level: "专升本", major: "财务管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广州航海学院", level: "专升本", major: "国际商务", durationStr: "3年", totalFee: 7500 },
+  { school: "广州航海学院", level: "专升本", major: "交通管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广州航海学院", level: "专升本", major: "电子商务", durationStr: "3年", totalFee: 7500 },
+  { school: "肇庆医学院", level: "高起专", major: "护理", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "药学", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "中药学", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "中医学", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "临床医学", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "口腔医学", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "针灸推拿", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "康复治疗学", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "医学检验技术", durationStr: "3年", totalFee: 8970 },
+  { school: "肇庆医学院", level: "高起专", major: "医学影像技术", durationStr: "3年", totalFee: 8970 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "大数据与会计", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "市场营销", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "现代物流管理", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "电子商务", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "电子信息工程技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "机械设计与制造", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "建筑工程技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "动漫制作技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "康复治疗技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "护理", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "药学", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "商务英语", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "学前教育", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "电气自动化技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "数字媒体技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东创新科技职业学院", level: "高起专", major: "中药学", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "大数据与会计", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "现代物流管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "电子商务", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "市场营销", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "人力资源管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "建设工程管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "工程造价", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "动漫制作技术", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "数控技术", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "汽车技术服务与营销", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "汽车制造与试验技术", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "建筑设计", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "模具设计与制造", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "计算机网络技术", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州南洋理工职业学院", level: "高起专", major: "学前教育", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广东文理职业学院", level: "高起专", major: "建筑工程技术", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "电气自动化技术", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "汽车检测与维修技术", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "电子信息工程技术", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "应用电子技术", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "计算机网络技术", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "药学", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "大数据与会计", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "法律事务", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东文理职业学院", level: "高起专", major: "人力资源管理", durationStr: "2.5年", totalFee: 7875 },
+  { school: "广东科技学院", level: "高起专", major: "电气自动化技术", durationStr: "2.5年", totalFee: 9500 },
+  { school: "广东科技学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 9500 },
+  { school: "广东科技学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 9500 },
+  { school: "广东科技学院", level: "专升本", major: "金融工程", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "投资学", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "市场营销", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "机械电子工程", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "汽车服务工程", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "电子信息工程", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "自动化", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "软件工程", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "网络工程", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "工商管理", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "会计学", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "物联网工程", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "财务管理", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "物流管理", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东科技学院", level: "专升本", major: "电子商务", durationStr: "2.5年", totalFee: 12000 },
+  { school: "广东理工学院", level: "高起专", major: "建筑工程技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "机械设计与制造", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "电气自动化技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "汽车制造与试验技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "电子信息工程技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "建筑室内设计", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "高起专", major: "广告艺术设计", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东理工学院", level: "专升本", major: "金融工程", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "机械设计制造及其自动化", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "车辆工程", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "电气工程及其自动化", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "电子信息工程", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "计算机科学与技术", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "风景园林", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "财务管理", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "物流管理", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广东理工学院", level: "专升本", major: "标准化工程", durationStr: "2.5年", totalFee: 9900 },
+  { school: "广州新华学院", level: "专升本", major: "国际经济与贸易", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州新华学院", level: "专升本", major: "电气工程及其自动化", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州新华学院", level: "专升本", major: "软件工程", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州新华学院", level: "专升本", major: "数字媒体技术", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州新华学院", level: "专升本", major: "工商管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州新华学院", level: "专升本", major: "会计学", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州新华学院", level: "专升本", major: "人力资源管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州新华学院", level: "专升本", major: "行政管理", durationStr: "2.5年", totalFee: 8750 },
+  { school: "广州新华学院", level: "专升本", major: "护理学", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州新华学院", level: "专升本", major: "药学", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州东华职业学院", level: "高起专", major: "药学", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "学前教育", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "护理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "现代物流管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "动漫制作技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "人力资源管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "电子商务", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "工程造价", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "汽车制造与试验技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "工业机器人技术", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "建筑工程管理", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "网络新闻与传播", durationStr: "2.5年", totalFee: 7500 },
+  { school: "广州东华职业学院", level: "高起专", major: "人工智能技术应用", durationStr: "2.5年", totalFee: 7500 },
+  { school: "惠州卫生职业技术学院", level: "高起专", major: "护理", durationStr: "3年", totalFee: 8580 },
+  { school: "惠州卫生职业技术学院", level: "高起专", major: "助产", durationStr: "3年", totalFee: 8580 },
+  { school: "惠州卫生职业技术学院", level: "高起专", major: "药学", durationStr: "3年", totalFee: 8580 },
+  { school: "惠州卫生职业技术学院", level: "高起专", major: "中药学", durationStr: "3年", totalFee: 8580 },
+  { school: "惠州卫生职业技术学院", level: "高起专", major: "医学检验技术", durationStr: "3年", totalFee: 8580 },
+  { school: "惠州卫生职业技术学院", level: "高起专", major: "康复治疗技术", durationStr: "3年", totalFee: 8580 },
+  { school: "惠州卫生职业技术学院", level: "高起专", major: "口腔医学技术", durationStr: "3年", totalFee: 8580 },
+  { school: "惠州卫生职业技术学院", level: "高起专", major: "医学美容技术", durationStr: "3年", totalFee: 8580 },
+  { school: "广州理工学院", level: "专升本", major: "电气工程及其自动化", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "土木工程", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "计算机科学与技术", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "人力资源管理", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "会计学", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "软件工程", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "工程造价", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "工程管理", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "市场营销", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "电子商务", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "物流管理", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "财务管理", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "机械设计制造及其自动化", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "通信工程", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "车辆工程", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "汉语言文学", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广州理工学院", level: "专升本", major: "小学教育", durationStr: "2.5年", totalFee: 10000 },
+  { school: "广东医科大学", level: "专升本", major: "护理学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东医科大学", level: "专升本", major: "临床医学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东医科大学", level: "专升本", major: "口腔医学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东医科大学", level: "专升本", major: "中药学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东医科大学", level: "专升本", major: "医学影像学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东医科大学", level: "专升本", major: "康复治疗学", durationStr: "3年", totalFee: 10530 },
+  { school: "广东医科大学", level: "专升本", major: "医学检验技术", durationStr: "3年", totalFee: 10530 },
+  { school: "广州医科大学", level: "专升本", major: "护理学", durationStr: "3年", totalFee: 10530 },
+  { school: "广州医科大学", level: "专升本", major: "药学", durationStr: "3年", totalFee: 10530 },
+  { school: "广州医科大学", level: "专升本", major: "康复治疗学", durationStr: "3年", totalFee: 10530 },
+  { school: "广州医科大学", level: "专升本", major: "中西医临床医学", durationStr: "3年", totalFee: 10530 },
+  { school: "广州城建职业学院", level: "高起专", major: "建筑工程技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "工程造价", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "机电一体化技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "轨道交通技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "计算机应用技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "大数据与会计", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "电子商务", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "工商企业管理", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "商务英语", durationStr: "3年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "室内艺术设计", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "学前教育", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广州城建职业学院", level: "高起专", major: "新能源汽车技术", durationStr: "2.5年", totalFee: 9000 },
+  { school: "广东技术师范大学", level: "高起专", major: "大数据与会计", durationStr: "3年", totalFee: 6900 },
+  { school: "广东技术师范大学", level: "专升本", major: "学前教育", durationStr: "3年", totalFee: 7500 },
+  { school: "广东技术师范大学", level: "专升本", major: "教育技术学", durationStr: "3年", totalFee: 7500 },
+  { school: "广东技术师范大学", level: "专升本", major: "电子商务", durationStr: "3年", totalFee: 7500 },
+  { school: "广东技术师范大学", level: "专升本", major: "工商管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广东技术师范大学", level: "专升本", major: "会计学", durationStr: "3年", totalFee: 7500 },
+  { school: "广东技术师范大学", level: "专升本", major: "行政管理", durationStr: "3年", totalFee: 7500 },
+  { school: "广东技术师范大学", level: "专升本", major: "计算机科学与技术", durationStr: "3年", totalFee: 8625 },
+  { school: "广东技术师范大学", level: "专升本", major: "机械设计制造及其自动化", durationStr: "3年", totalFee: 8625 },
+  { school: "广东技术师范大学", level: "专升本", major: "人工智能", durationStr: "3年", totalFee: 8625 },
+  { school: "广东技术师范大学", level: "专升本", major: "新能源汽车工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广东技术师范大学", level: "专升本", major: "电气工程及其自动化", durationStr: "3年", totalFee: 8625 },
+  { school: "广东技术师范大学", level: "专升本", major: "车辆工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广东技术师范大学", level: "专升本", major: "电子信息工程", durationStr: "3年", totalFee: 8625 },
+  { school: "广东技术师范大学", level: "专升本", major: "数学与应用数学", durationStr: "3年", totalFee: 8625 }
+    ];
+
+    function parseDurationYear(durationStr) {
+        const match = durationStr.match(/(\d+(?:\.\d+)?)/);
+        if (match) return parseFloat(match[1]);
+        return 3;
+    }
+
+    const enrichedRows = rawRows.map(row => {
+        const durationYears = parseDurationYear(row.durationStr);
+        const yearlyTuition = row.totalFee / durationYears;
+        return {
+            ...row,
+            durationYears: durationYears,
+            yearlyTuition: Math.round(yearlyTuition),
+            yearlyTuitionStr: Math.round(yearlyTuition) + "元/年"
+        };
+    });
+
+    const schoolMap = new Map();
+    enrichedRows.forEach(row => {
+        if (!schoolMap.has(row.school)) {
+            schoolMap.set(row.school, {
+                id: schoolMap.size + 1,
+                name: row.school,
+                majors: []
+            });
+        }
+        const schoolObj = schoolMap.get(row.school);
+        schoolObj.majors.push({
+            name: row.major,
+            level: row.level,
+            durationStr: row.durationStr,
+            totalFee: row.totalFee,
+            totalFeeStr: row.totalFee + "元",
+            yearlyTuition: row.yearlyTuition,
+            yearlyTuitionStr: row.yearlyTuitionStr
+        });
+    });
+
+    const universitiesData = Array.from(schoolMap.values());
+    universitiesData.sort((a,b) => a.name.localeCompare(b.name));
+
+    let currentFlatList = [];
+    let activeSortType = "default";
+    let currentLevel = null;
+    let currentKeyword = "";
+
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const container = document.getElementById('universitiesContainer');
+    const resultSpan = document.getElementById('resultCount');
+    const radioGaozhuan = document.querySelector('input[value="高起专"]');
+    const radioZsb = document.querySelector('input[value="专升本"]');
+    const levelOptionDivs = document.querySelectorAll('.level-option');
+
+    function updateLevelUI() {
+        levelOptionDivs.forEach(div => {
+            const radio = div.querySelector('input');
+            if (radio && radio.checked) div.classList.add('active');
+            else div.classList.remove('active');
+        });
+    }
+
+    radioGaozhuan.addEventListener('change', () => { if(radioGaozhuan.checked) { currentLevel = "高起专"; updateLevelUI(); performSearch(); } });
+    radioZsb.addEventListener('change', () => { if(radioZsb.checked) { currentLevel = "专升本"; updateLevelUI(); performSearch(); } });
+
+    function buildFilteredList() {
+        if (!currentLevel) return [];
+        const lowerKw = currentKeyword.trim().toLowerCase();
+        let result = [];
+        let idx = 0;
+        universitiesData.forEach(uni => {
+            uni.majors.forEach(major => {
+                if (major.level !== currentLevel) return;
+                if (lowerKw !== "" && !major.name.toLowerCase().includes(lowerKw)) return;
+                result.push({
+                    uniId: uni.id,
+                    uniName: uni.name,
+                    majorName: major.name,
+                    durationStr: major.durationStr,
+                    totalFee: major.totalFee,
+                    totalFeeStr: major.totalFeeStr,
+                    yearlyTuition: major.yearlyTuition,
+                    yearlyTuitionStr: major.yearlyTuitionStr,
+                    level: major.level,
+                    originalIndex: idx++
+                });
+            });
+        });
+        return result;
+    }
+
+    function sortList(list, sortType) {
+        if (sortType === "year_asc") {
+            return [...list].sort((a,b) => {
+                if (a.yearlyTuition === null) return 1;
+                if (b.yearlyTuition === null) return -1;
+                return a.yearlyTuition - b.yearlyTuition;
+            });
+        }
+        if (sortType === "total_asc") {
+            return [...list].sort((a,b) => {
+                if (a.totalFee === null) return 1;
+                if (b.totalFee === null) return -1;
+                return a.totalFee - b.totalFee;
+            });
+        }
+        return [...list].sort((a,b) => {
+            if (a.uniId !== b.uniId) return a.uniId - b.uniId;
+            return a.originalIndex - b.originalIndex;
+        });
+    }
+
+    function render() {
+        if (!currentLevel) {
+            container.innerHTML = `<div class="empty-state"><div style="font-size:3rem;">⚠️</div><p>请先选择招生层次（高起专 / 专升本）</p><p style="font-size:0.9rem;">然后输入专业关键词进行查询</p></div>`;
+            resultSpan.innerText = `📌 请选择层次`;
+            return;
+        }
+        if (currentFlatList.length === 0) {
+            container.innerHTML = `<div class="empty-state"><div style="font-size:3rem;">🔍</div><p>未找到相关专业（当前层次：${currentLevel}）</p><p>试试其他关键词或重置条件</p></div>`;
+            resultSpan.innerText = `📌 共 0 所院校，0 个专业 (${currentLevel})`;
+            return;
+        }
+
+        const sorted = sortList(currentFlatList, activeSortType);
+        const uniMap = new Map();
+        for (const item of sorted) {
+            if (!uniMap.has(item.uniId)) {
+                uniMap.set(item.uniId, {
+                    uniName: item.uniName,
+                    majors: []
+                });
+            }
+            uniMap.get(item.uniId).majors.push({
+                name: item.majorName,
+                duration: item.durationStr,
+                yearlyTuition: item.yearlyTuitionStr,
+                totalFee: item.totalFeeStr,
+                level: item.level
+            });
+        }
+
+        const totalUni = uniMap.size;
+        const totalMajor = sorted.length;
+        resultSpan.innerText = `📌 共 ${totalUni} 所院校，${totalMajor} 个专业 (${currentLevel})`;
+
+        let html = '';
+        for (let [uniId, info] of uniMap.entries()) {
+            let majorsHtml = '';
+            for (let m of info.majors) {
+                majorsHtml += `
+                    <div class="major-item">
+                        <div class="major-name">📖 ${escapeHtml(m.name)}</div>
+                        <div class="fee-info">
+                            <span class="fee-item year-tuition">💰 年学费: ${escapeHtml(m.yearlyTuition)}</span>
+                            <span class="fee-item duration">📅 学制: ${escapeHtml(m.duration)}</span>
+                            <span class="fee-item total-fee">🎓 总费用: ${escapeHtml(m.totalFee)}</span>
+                        </div>
+                        <div class="level-tag">🎓 ${escapeHtml(m.level)}</div>
+                    </div>
+                `;
+            }
+            html += `
+                <div class="uni-card">
+                    <div class="card-header">
+                        <div class="uni-name">
+                            <span>🏛️ ${escapeHtml(info.uniName)}</span>
+                            <span class="uni-badge">学历提升</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        ${majorsHtml}
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    function escapeHtml(str) { 
+        if (!str && str !== 0) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    function performSearch() {
+        if (!currentLevel) {
+            render();
+            return;
+        }
+        currentKeyword = searchInput.value;
+        currentFlatList = buildFilteredList();
+        render();
+    }
+    
+    function resetConditions() {
+        searchInput.value = "";
+        currentKeyword = "";
+        if (currentLevel) {
+            currentFlatList = buildFilteredList();
+            render();
+        } else {
+            render();
+        }
+    }
+    
+    function setSort(type) {
+        activeSortType = type;
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            if (btn.getAttribute('data-sort') === type) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        render();
+    }
+
+    // 复制微信号功能
+    const copyBtn = document.getElementById('copyWechatBtn');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+            const wechatId = document.getElementById('wechatId').innerText;
+            navigator.clipboard.writeText(wechatId).then(() => {
+                const originalText = copyBtn.innerText;
+                copyBtn.innerText = '已复制✓';
+                setTimeout(() => { copyBtn.innerText = originalText; }, 1500);
+            }).catch(() => {
+                alert('手动复制微信号: ' + wechatId);
+            });
+        });
+    }
+
+    searchBtn.addEventListener('click', performSearch);
+    clearBtn.addEventListener('click', resetConditions);
+    searchInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') performSearch(); });
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const type = btn.getAttribute('data-sort');
+            setSort(type);
+        });
+    });
+    
+    render();
+</script>
+</body>
+</html>
